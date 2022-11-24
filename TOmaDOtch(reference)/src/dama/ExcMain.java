@@ -42,7 +42,7 @@ public class ExcMain {
 						p.print();
 						if(p.energy <= 0)
 						{
-							System.out.println("게임 종료");
+							System.out.println("게임 종료@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 							flag = false;
 						}
 						break;
