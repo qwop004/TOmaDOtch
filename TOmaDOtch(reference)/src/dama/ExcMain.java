@@ -7,7 +7,7 @@ public class ExcMain {
 		Scanner sc = new Scanner(System.in); // 너무나도 익숙한 Scanner
 		Poket p = null; // Poket 객체 선언 및 null값으로 초기화
 		System.out.println("포켓몬을 선택하시오.");
-		System.out.println("1. 피카츄\n2. 이상해씨\n3. 꼬부기");
+		System.out.println("1. 피카츄\n2. 이상해씨\n3. 꼬부기"); //됐나?
 				int x = sc.nextInt(); // 종족값을 입력받음
 				System.out.println("이름을 입력하시오.");
 				String name = sc.next(); // 이름을 입력받음
