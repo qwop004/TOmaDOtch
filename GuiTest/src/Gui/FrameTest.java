@@ -2,7 +2,6 @@ package Gui;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.*;
 
 public class FrameTest extends JFrame {
@@ -16,7 +15,7 @@ public class FrameTest extends JFrame {
 	public static final int statusWidth = 200;
 	public static final int statusHeight = 20;
 	
-	public static final int ToDoListWidth = 200;
+	public static final int ToDoListWidth = 250;
 	public static final int ToDoListHeight = 20;
 	
 	public static final int blankWidth = 20;
@@ -36,6 +35,13 @@ public class FrameTest extends JFrame {
     		new Label("Status 2", Label.LEFT),
     		new Label("Status 3", Label.LEFT)
     		};
+    
+    String toDoString[] = {
+    		//임시
+    		"Test1",
+    		"Test2",
+    		"Test3"
+    };
 	
 	public FrameTest(String str) {
 		
@@ -50,7 +56,6 @@ public class FrameTest extends JFrame {
         contentPane.setLayout(null);
         
         makeMenu();
-        
         makeGUI();	
 	}
 	
@@ -61,6 +66,11 @@ public class FrameTest extends JFrame {
 	public void makeGUI() {
 
         for(int i = 0; i<buttons.length; i++) setButton(buttons[i],i); //하단 버튼 배치
+        
+        Label tamaTitle = new Label("I'm Tomadotchi.", Label.CENTER);
+        tamaTitle.setLocation(blankWidth, 10);
+		tamaTitle.setSize(statusWidth, ToDoListHeight);
+		this.add(tamaTitle);
         for(int i = 0; i<statuses.length; i++) setStatus(statuses[i],i); //캐릭터 스테이터스 표시 라벨 배치
         
         /* 캐릭터이미지출력(이거 인터넷에 있는 코드 그대로 긁어다 붙인 거라 수정 필요)
@@ -72,10 +82,17 @@ public class FrameTest extends JFrame {
         contentPane.add(imageLabel);
         */
         
-        Label toDoTitle = new Label("To Do", Label.CENTER);
-        toDoTitle.setLocation(blankWidth, ToDoListHeight);
+        Label toDoTitle = new Label("To Do List", Label.CENTER);
+        toDoTitle.setLocation(blankWidth*2 + statusWidth, 10);
 		toDoTitle.setSize(ToDoListWidth, ToDoListHeight);
 		this.add(toDoTitle);
+		
+	    JCheckBox[] checkBoxes = new JCheckBox[toDoString.length];
+        for(int i = 0; i<toDoString.length; i++){//체크박스 배치
+            checkBoxes[i] = new JCheckBox("");
+            setCheckBox(checkBoxes[i],i);
+            checkBoxes[i].addActionListener(event -> {buttons[5].setEnabled(true); buttons[6].setEnabled(true);});
+        }
         
 		updateToDoList();
 		/*
@@ -90,16 +107,15 @@ public class FrameTest extends JFrame {
         buttons[2].addActionListener(event -> {confirmButtonDialog(buttons[2], 2);});
         buttons[3].addActionListener(event -> {addButtonDialog();});
         buttons[4].addActionListener(event -> {deleteButtonDialog();});
-        buttons[5].addActionListener(event -> {});
-        buttons[6].addActionListener(event -> {});
+        buttons[5].addActionListener(event -> {resetButtonDialog();});
+        buttons[6].addActionListener(event -> {applyButtonDialog();});
         
 		buttons[5].setEnabled(false);
 		buttons[6].setEnabled(false);
 	}
 
 	public void updateToDoList() { //투두리스트 라벨을 새로 쏴주는 메소드
-		//String toDoString[] = ToDoList.getToDoList(); //getToDoList 하면 파일에서 잘 열어서 string 배열로 넘겨주세요
-		String toDoString[] = {"Test1", "Test2", "Test3"}; //위에 코드 준비 안 돼서 임시로 만든 것
+		//toDoString[] = ToDoList.getToDoList(); //getToDoList 하면 파일에서 잘 열어서 string 배열로 넘겨주세요
 		Label toDo[] = new Label[toDoString.length];
         for(int i = 0; i<toDoString.length; i++){
         	toDo[i] = new Label(toDoString[i]);
@@ -125,13 +141,19 @@ public class FrameTest extends JFrame {
 	}
 	
 	public void setStatus(Label status, int i){ //캐릭터 정보 배치
-		status.setLocation(blankWidth, blankWidth + i * statusHeight);
+		status.setLocation(blankWidth, 40 + i * statusHeight);
         status.setSize(statusWidth, statusHeight);
         this.add(status);
 	}
 	
+	public void setCheckBox(JCheckBox checkBox, int i) {
+		checkBox.setLocation(blankWidth + statusWidth, 40 + i * ToDoListHeight);
+		checkBox.setSize(blankWidth, ToDoListHeight);
+		this.add(checkBox);
+	}
+	
 	public void setToDoList(Label ToDoList, int i){ //투두리스트 배치
-		ToDoList.setLocation(blankWidth + statusWidth, 40 + i * ToDoListHeight);
+		ToDoList.setLocation(blankWidth*2 + statusWidth, 40 + i * ToDoListHeight);
 		ToDoList.setSize(ToDoListWidth, ToDoListHeight);
 		this.add(ToDoList);
 	}
@@ -143,6 +165,7 @@ public class FrameTest extends JFrame {
         d.setSize(150,120);
         d.setVisible(true);
         d.setLayout(null);
+        d.setModal(true);
        
 		String information[] = {"Feed TOmaDOtchi.", "Exercise TOmaDOtchi.", "Button3."};
 		Label informationLabel = new Label(information[num], Label.LEFT);
@@ -150,27 +173,25 @@ public class FrameTest extends JFrame {
 		informationLabel.setSize(150, 20);
         d.add(informationLabel);
         
-        addCancelOK1(d, 80);
-	}
-	
-	public void addCancelOK1(Dialog d, int height) { //처음엔 분리한 목적이 있었는데 이제 그냥 위에 있는 메소드랑 합칠 가능성이 큽니다
-		
-		d.setModal(true);
-        
 		Button cancelButton = new Button("Cancel");
-        cancelButton.setLocation(20,height);
+        cancelButton.setLocation(20, 80);
 		cancelButton.setSize(buttonWidth,buttonHeight);
 		cancelButton.addActionListener(event -> {d.dispose();});
         d.add(cancelButton);
         
         Button okButton = new Button("OK");
-        okButton.setLocation(75,height);
+        okButton.setLocation(75, 80);
         okButton.setSize(buttonWidth,buttonHeight);
         okButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//다이얼로그 삭제하기 전에 실행할 메소드 갖다 놓아야 함... 하지만 어떻게?
-				//이거 올린 후에 프로그램 구조가 확 바뀔 수 있습니다
+				if(num==0){
+					//밥먹이기
+				} else if(num==1){
+					//운동시키기
+				} else if(num==2){
+					//버튼3
+				}
 				d.dispose();
 			}
         });
@@ -217,9 +238,6 @@ public class FrameTest extends JFrame {
 	}
 	
 	public void deleteButtonDialog() { //삭제할 투 두 리스트를 고르는 다이얼로그
-		//라디오버튼을 넣긴 했는데 값 읽어들이는 법을 몰라서... 대폭 수정할 가능성 있음
-        //String toDoString[] = ToDoList.getToDoList();
-        String toDoString[] = {"Test1", "Test2", "Test3"}; //위에 코드 준비 안 돼서 임시로 만든 것
 		
 		Dialog d= new Dialog(this);
 		d.setTitle("Add");
@@ -259,9 +277,81 @@ public class FrameTest extends JFrame {
         okButton.setSize(buttonWidth,buttonHeight);
         okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				for(int i=0;i<toDoString.length;i++) {
+					if (radio[i].isSelected() == true) {
+						deleteToDoList(i);
+					}
 				buttons[5].setEnabled(true);
 				buttons[6].setEnabled(true);
-				deleteToDoList(0);
+				d.dispose();
+				}
+			}
+		});
+		d.add(okButton);
+	}
+	
+	public void resetButtonDialog() { //버튼 누르고 실행하기 전에 확인받는 다이얼로그를 생성(0,1,2번 버튼)
+		Dialog d= new Dialog(this);
+		d.setTitle("Confirm");
+        d.setSize(150,120);
+        d.setVisible(true);
+        d.setLayout(null);
+        d.setModal(true);
+       
+		Label informationLabel = new Label("Reset your changes.", Label.LEFT);
+		informationLabel.setLocation(20,50);
+		informationLabel.setSize(150, 20);
+        d.add(informationLabel);
+        
+		Button cancelButton = new Button("Cancel");
+        cancelButton.setLocation(20, 80);
+		cancelButton.setSize(buttonWidth,buttonHeight);
+		cancelButton.addActionListener(event -> {d.dispose();});
+        d.add(cancelButton);
+        
+        Button okButton = new Button("OK");
+        okButton.setLocation(75, 80);
+        okButton.setSize(buttonWidth,buttonHeight);
+        okButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//리셋
+				buttons[5].setEnabled(false);
+				buttons[6].setEnabled(false);
+				d.dispose();
+			}
+        });
+		d.add(okButton);
+	}
+	
+	public void applyButtonDialog() { //버튼 누르고 실행하기 전에 확인받는 다이얼로그를 생성(0,1,2번 버튼)
+		Dialog d= new Dialog(this);
+		d.setTitle("Confirm");
+        d.setSize(150,120);
+        d.setVisible(true);
+        d.setLayout(null);
+        d.setModal(true);
+       
+		Label informationLabel = new Label("Apply your changes.", Label.LEFT);
+		informationLabel.setLocation(20,50);
+		informationLabel.setSize(150, 20);
+        d.add(informationLabel);
+        
+		Button cancelButton = new Button("Cancel");
+        cancelButton.setLocation(20, 80);
+		cancelButton.setSize(buttonWidth,buttonHeight);
+		cancelButton.addActionListener(event -> {d.dispose();});
+        d.add(cancelButton);
+        
+        Button okButton = new Button("OK");
+        okButton.setLocation(75, 80);
+        okButton.setSize(buttonWidth,buttonHeight);
+        okButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//저장
+				buttons[5].setEnabled(false);
+				buttons[6].setEnabled(false);
 				d.dispose();
 			}
         });
