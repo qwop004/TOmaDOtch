@@ -1,3 +1,7 @@
 ABC
 DEF
+<<<<<<< HEAD
 12333
+=======
+뭐시기
+>>>>>>> refs/remotes/20221202/Taemin
