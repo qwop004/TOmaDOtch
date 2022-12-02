@@ -1,9 +1,12 @@
 package dama;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -16,7 +19,7 @@ public class Poket {
 	public int age = Integer.parseInt(fileData[2]); // 나이
 	public int power = Integer.parseInt(fileData[3]); // 파워
 	public int energy = Integer.parseInt(fileData[4]); // 에너지
-	private int cnt = Integer.parseInt(fileData[5]);
+	public int cnt = Integer.parseInt(fileData[5]);
 	
 	public int getAge() {return age;}
 	public void setAge(int age) {this.age = age;}
@@ -27,7 +30,7 @@ public class Poket {
 	public int getCnt() {return cnt;}
 	public void setCnt(int cnt) {this.cnt = cnt;}
 	
-	public static String[] getFileData() { //투두리스트 반환	
+	public static String[] getFileData() { //캐릭터 정보 반환	
 		ArrayList<String> packet = new ArrayList<>();		
 		String[] input_arr = new String[packet.size()];		
 		BufferedReader br = null;				
@@ -50,6 +53,27 @@ public class Poket {
 			}
 		}
 		return input_arr;
+	}
+	
+	public void setFileData() {//GUI 닫을 때 캐릭터 관련 변경사항을 파일에 저장
+		try (FileOutputStream fos = new FileOutputStream(filePath, false)) {} //false 옵션으로 파일을 열면 내용이 사라짐.
+		catch(IOException e) {e.printStackTrace();}
+		try {
+            BufferedWriter fw = new BufferedWriter(new FileWriter(filePath,true));
+            fw.write(race);
+            fw.newLine();
+            fw.write(name);
+            fw.newLine();
+            fw.write(Integer.toString(age));
+            fw.newLine();
+            fw.write(Integer.toString(power));
+            fw.newLine();
+            fw.write(Integer.toString(energy));
+            fw.newLine();
+            fw.write(Integer.toString(cnt));
+            fw.close();
+        }
+        catch(Exception e) {e.printStackTrace();}
 	}
 	
 	public Poket() // 생성자
