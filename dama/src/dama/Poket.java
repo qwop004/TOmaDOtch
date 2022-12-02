@@ -22,12 +22,14 @@ public class Poket {
 	public int cnt = Integer.parseInt(fileData[5]);
 	
 	public int getAge() {return age;}
-	public void setAge(int age) {this.age = age;}
 	public int getPower() {return power;}
-	public void setPower(int power) {this.power = power;}
 	public int getEnergy() {return energy;}
-	public void setEnergy(int energy) {this.energy = energy;}
 	public int getCnt() {return cnt;}
+	
+	//당장은 안써요
+	public void setAge(int age) {this.age = age;}
+	public void setPower(int power) {this.power = power;}
+	public void setEnergy(int energy) {this.energy = energy;}
 	public void setCnt(int cnt) {this.cnt = cnt;}
 	
 	public static String[] getFileData() { //캐릭터 정보 반환	

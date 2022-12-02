@@ -115,6 +115,7 @@ public class FrameTest2 extends JFrame {
         buttons[5].addActionListener(event -> {resetButtonDialog();});
         buttons[6].addActionListener(event -> {applyButtonDialog();});
         
+        buttons[4].setEnabled(toDoString.length==0?false:true);
 		buttons[5].setEnabled(false);
 		buttons[6].setEnabled(false);
 	}
@@ -134,6 +135,7 @@ public class FrameTest2 extends JFrame {
             checkBoxes[i] = new JCheckBox("");
             setCheckBox(checkBoxes[i],i);
             checkBoxes[i].addActionListener(event -> {
+            	buttons[4].setEnabled(toDoString.length==0?false:true);
             	buttons[5].setEnabled(true);
             	buttons[6].setEnabled(true);
             	});
@@ -270,12 +272,10 @@ public class FrameTest2 extends JFrame {
         d.setVisible(true);
         d.setLayout(null);
         
-        
         Label informationLabel = new Label("Please select the item to be deleted.", Label.LEFT);
 		informationLabel.setLocation(20,40);
 		informationLabel.setSize(260, 20);
         d.add(informationLabel);
-        
         
         JRadioButton radio[] = new JRadioButton[toDoString.length];
         ButtonGroup group = new ButtonGroup();
