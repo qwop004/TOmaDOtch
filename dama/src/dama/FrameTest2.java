@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
-
 public class FrameTest2 extends JFrame {
 	
 	public static final int windowWidth = 500;
@@ -38,8 +37,6 @@ public class FrameTest2 extends JFrame {
     		};
     
     String toDoString[] = ToDoList.getToDoList();
-    
-    JCheckBox checkBoxes[] = new JCheckBox[toDoString.length];
 	
 	public FrameTest2(String str) {
 		
@@ -113,6 +110,7 @@ public class FrameTest2 extends JFrame {
 	};
 	
 	public void updateCheckBox() { //체크박스를 새로 배치
+	    JCheckBox checkBoxes[] = new JCheckBox[toDoString.length];
         for(int i = 0; i<toDoString.length; i++){
             checkBoxes[i] = new JCheckBox("");
             setCheckBox(checkBoxes[i],i);
