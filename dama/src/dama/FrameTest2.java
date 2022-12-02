@@ -128,7 +128,7 @@ public class FrameTest2 extends JFrame {
 	};
 	
 	public void deleteToDoList(int num) {//deleteButtonDialog에서 받은 번호를 넣어주면 ToDoList의 deleteToDoList로 쏴줘서 삭제하게 하고, 화면의 투두리스트 업데이트
-		//ToDoList.deleteTodoList(num);
+		ToDoList.deleteToDoList(num);
 		updateToDoList();
 		updateCheckBox();
 	};
