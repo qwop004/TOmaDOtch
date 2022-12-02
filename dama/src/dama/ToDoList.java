@@ -56,25 +56,8 @@ public class ToDoList {
 		catch(IOException e) {e.printStackTrace();} 
 		
 		for(int i=0; i<afterArray.length; i++) {
-			if(!afterArray[i].isBlank()) {
-				addToDoList(afterArray[i]);}
+			addToDoList(afterArray[i]);
 		}
-//		
-//		Array = newList.toArray(new String[0]);
-//		
-//		try (FileOutputStream fos = new FileOutputStream(filePath, false)) {
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//		
-//		addToDoList(Array);
-		
 	}
-
-
 	
-
 }
-
-	

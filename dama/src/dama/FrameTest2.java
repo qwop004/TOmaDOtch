@@ -120,6 +120,7 @@ public class FrameTest2 extends JFrame {
 		buttons[6].setEnabled(false);
 	}
 
+
 	public void updateToDoList() { //투두리스트 라벨을 새로 쏴주는 메소드
 		toDoString = ToDoList.getToDoList(); //파일을 배열로 반환하여 넘겨받음
 		toDo = new Label[toDoString.length];
@@ -151,15 +152,13 @@ public class FrameTest2 extends JFrame {
 	public void deleteToDoList(int index) {//deleteButtonDialog에서 받은 번호를 넣어주면 ToDoList의 deleteToDoList로 쏴줘서 삭제하게 하고, 화면의 투두리스트 업데이트
 		ToDoList.deleteToDoList(index);
 		for(int i = 0; i<toDoString.length; i++) {
-			toDo[i].setEnabled(false);
-			toDo[i].setVisible(false);
-			checkBoxes[i].setEnabled(false);
-			checkBoxes[i].setVisible(false);
+			this.remove(toDo[i]);
+			this.remove(checkBoxes[i]);
 		}
 		updateToDoList();
 		updateCheckBox();
 	};
-	
+
 	
 	public void setButton(Button button, int i){ //버튼 배치
 		button.setLocation(blankWidth + i * (buttonWidth + 15), 225);
