@@ -1,8 +1,8 @@
 package dama;
-
 import java.io.*;
 import java.util.ArrayList;
-
+import java.util.Arrays;
+import java.util.List;
 
 public class ToDoList {
 	public static String filePath = "data.txt";
@@ -53,6 +53,7 @@ public class ToDoList {
         	e.printStackTrace();
         }
      }
+	
 
 }
 
