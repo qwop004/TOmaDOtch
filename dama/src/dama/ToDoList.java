@@ -2,12 +2,10 @@ package dama;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class ToDoList {
 	
-	public static String filePath = "data.txt"; //사용할 파일명 정의
+	public static String filePath = "ToDoList.txt"; //사용할 파일명 정의
 	
 	public static String[] getToDoList() { //투두리스트 반환	
 		ArrayList<String> packet = new ArrayList<>();		
@@ -47,22 +45,19 @@ public class ToDoList {
 
 	
 	public static void deleteToDoList(int num) { //투두리스트 삭제
-		String[] Array = getToDoList();
-		List<String> newList = new ArrayList<>(Arrays.asList(Array));
-		newList.remove(num);
+		String[] beforeArray = getToDoList();
+		String[] afterArray = new String[beforeArray.length - 1];
+		int j = 0;
+		for (int  i = 0; i<beforeArray.length; i++) {
+			if (i != num) afterArray[j++] = beforeArray[i];
+		}
 		
-		Array = newList.toArray(new String[0]);
+		try (FileOutputStream fos = new FileOutputStream(filePath, false)) {} //false 옵션으로 파일을 열면 내용이 사라짐.
+		catch(IOException e) {e.printStackTrace();} 
 		
-		 try (FileOutputStream fos = new FileOutputStream(filePath, false)) { //false 옵션으로 파일을 열면 내용이 사라짐.
-
-		 } catch(IOException e) {e.printStackTrace();} 
-		
-		for(int i=0; i<=Array.length; i++) {
-			
-			if(!Array[i].isBlank()) {
-				System.out.println("Start");
-				System.out.println(Array[i]); //정상 반환되는지 볼려고 콘솔창에 출력
-				addToDoList(Array[i]);}
+		for(int i=0; i<afterArray.length; i++) {
+			if(!afterArray[i].isBlank()) {
+				addToDoList(afterArray[i]);}
 		}
 //		
 //		Array = newList.toArray(new String[0]);

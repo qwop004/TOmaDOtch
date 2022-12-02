@@ -20,6 +20,8 @@ public class FrameTest2 extends JFrame {
 	
 	public static final int blankWidth = 20;
 	
+	Poket poket = new Poket();
+	
 	Button buttons[] = { //하단 버튼
     		new Button("Feed"),
     		new Button("Exercise"),
@@ -31,16 +33,16 @@ public class FrameTest2 extends JFrame {
     		};
 	
     Label statuses[] = { //캐릭터 정보 라벨
-    		
-//    		new Label("Age" + Poket.getAge(), Label.LEFT),
-//    		new Label("Power"+ "=" + Poket.getPower(), Label.LEFT),
-//    		new Label("Energy" + "=" + Poket.getEnergy(), Label.LEFT) //이렇게 하면 될줄알았는데 왜안될까
-    		new Label("Age", Label.LEFT),
-    		new Label("Power", Label.LEFT),
-    		new Label("Energy", Label.LEFT)
+    		new Label("Age: " + poket.getAge(), Label.LEFT),
+    		new Label("Power: " + poket.getPower(), Label.LEFT),
+    		new Label("Age: " + poket.getEnergy(), Label.LEFT),
     		};
     
     String toDoString[] = ToDoList.getToDoList();
+    
+    Label toDo[] = new Label[toDoString.length];
+    
+    JCheckBox checkBoxes[] = new JCheckBox[toDoString.length];
 	
 	public FrameTest2(String str) {
 		
@@ -59,7 +61,7 @@ public class FrameTest2 extends JFrame {
 	}
 	
 	public void makeMenu() {
-		//만들 메뉴 - 파일 (저장, 불러오기, 새로 시작하기)
+		//만들 메뉴 - 파일 (저장, 불러오기, 새로 시작하기) (없어도 될 듯)
 	}
 	
 	public void makeGUI() {
@@ -106,7 +108,7 @@ public class FrameTest2 extends JFrame {
 
 	public void updateToDoList() { //투두리스트 라벨을 새로 쏴주는 메소드
 		toDoString = ToDoList.getToDoList(); //파일을 배열로 반환하여 넘겨받음
-		Label toDo[] = new Label[toDoString.length];
+		toDo = new Label[toDoString.length];
         for(int i = 0; i<toDoString.length; i++){
         	toDo[i] = new Label(toDoString[i]);
         	setToDoList(toDo[i],i);
@@ -114,7 +116,7 @@ public class FrameTest2 extends JFrame {
 	};
 	
 	public void updateCheckBox() { //체크박스를 새로 배치
-	    JCheckBox checkBoxes[] = new JCheckBox[toDoString.length];
+	    checkBoxes = new JCheckBox[toDoString.length];
         for(int i = 0; i<toDoString.length; i++){
             checkBoxes[i] = new JCheckBox("");
             setCheckBox(checkBoxes[i],i);
@@ -131,8 +133,14 @@ public class FrameTest2 extends JFrame {
 		updateCheckBox();
 	};
 	
-	public void deleteToDoList(int num) {//deleteButtonDialog에서 받은 번호를 넣어주면 ToDoList의 deleteToDoList로 쏴줘서 삭제하게 하고, 화면의 투두리스트 업데이트
-		ToDoList.deleteToDoList(num);
+	public void deleteToDoList(int index) {//deleteButtonDialog에서 받은 번호를 넣어주면 ToDoList의 deleteToDoList로 쏴줘서 삭제하게 하고, 화면의 투두리스트 업데이트
+		ToDoList.deleteToDoList(index);
+		for(int i = 0; i<toDoString.length; i++) {
+			toDo[i].setEnabled(false);
+			toDo[i].setVisible(false);
+			checkBoxes[i].setEnabled(false);
+			checkBoxes[i].setVisible(false);
+		}
 		updateToDoList();
 		updateCheckBox();
 	};

@@ -1,12 +1,22 @@
 package dama;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+
 public class Poket {
-	public String race; // 종족
-	public String name; // 캐릭터 이름
-	private int age; // 나이
-	private int power; // 파워
-	private int energy; // 에너지
-	private int cnt;
+
+	public static String filePath = "Tamagotchi.txt"; //사용할 파일명 정의
+	public String fileData[] = getFileData();
+	public String race = fileData[0]; // 종족
+	public String name = fileData[1]; // 캐릭터 이름
+	public int age = Integer.parseInt(fileData[2]); // 나이
+	public int power = Integer.parseInt(fileData[3]); // 파워
+	public int energy = Integer.parseInt(fileData[4]); // 에너지
+	private int cnt = Integer.parseInt(fileData[5]);
 	
 	public int getAge() {return age;}
 	public void setAge(int age) {this.age = age;}
@@ -16,6 +26,31 @@ public class Poket {
 	public void setEnergy(int energy) {this.energy = energy;}
 	public int getCnt() {return cnt;}
 	public void setCnt(int cnt) {this.cnt = cnt;}
+	
+	public static String[] getFileData() { //투두리스트 반환	
+		ArrayList<String> packet = new ArrayList<>();		
+		String[] input_arr = new String[packet.size()];		
+		BufferedReader br = null;				
+		try {
+			br = new BufferedReader(new FileReader(new File(filePath))); 
+			String s; 
+			while ((s = br.readLine()) != null) {
+				if(!s.isBlank())
+				packet.add(s);
+			}
+			input_arr = packet.toArray(input_arr);		
+			br.close();
+		}
+		catch (FileNotFoundException e) {e.printStackTrace();}
+		catch (IOException e) {e.printStackTrace();}
+		finally {
+			if(br != null) {
+				try {br.close();}
+				catch (IOException e) {e.printStackTrace();}
+			}
+		}
+		return input_arr;
+	}
 	
 	public Poket() // 생성자
 	{
