@@ -23,6 +23,8 @@ public class FrameTest2 extends JFrame {
 	
 	public static final int blankWidth = 20;
 	
+	public static final int toDoLength = 8;
+	
 	Poket poket = new Poket();
 	
 	Button buttons[] = { //하단 버튼
@@ -40,13 +42,26 @@ public class FrameTest2 extends JFrame {
     		new Label("Power: " + poket.getPower(), Label.LEFT),
     		new Label("Age: " + poket.getEnergy(), Label.LEFT),
     		};
-    
+    /*
     String toDoString[] = ToDoList.getToDoList();
-    
     Label toDo[] = new Label[toDoString.length];
-    
     JCheckBox checkBoxes[] = new JCheckBox[toDoString.length];
-	
+	*/
+    /*
+    String toDoString[] = new String[toDoLength];
+    Label toDo[] = new Label[toDoLength];
+    JCheckBox checkBoxes[] = new JCheckBox[toDoLength];
+    */
+    String toDoString[] = {"","","","","","","",""};
+    
+    Label toDo[] = {
+    		new Label(""),new Label(""),new Label(""),new Label(""),
+    		new Label(""),new Label(""),new Label(""),new Label("")
+    };
+    JCheckBox checkBoxes[] = {
+    		new JCheckBox(""),new JCheckBox(""),new JCheckBox(""),new JCheckBox(""),
+    		new JCheckBox(""),new JCheckBox(""),new JCheckBox(""),new JCheckBox(""),
+    };
     
     class JFrameWindowClosingEventHandler extends WindowAdapter {
     	public void windowClosing(WindowEvent e) {
@@ -123,20 +138,21 @@ public class FrameTest2 extends JFrame {
 
 	public void updateToDoList() { //투두리스트 라벨을 새로 쏴주는 메소드
 		toDoString = ToDoList.getToDoList(); //파일을 배열로 반환하여 넘겨받음
-		toDo = new Label[toDoString.length];
         for(int i = 0; i<toDoString.length; i++){
-        	toDo[i] = new Label(toDoString[i]);
+        	toDo[i].setVisible(true);
+			toDo[i].setEnabled(true);
+        	toDo[i].setText(toDoString[i]);
         	setToDoList(toDo[i],i);
         }
+        buttons[4].setEnabled(toDoString.length==0?false:true);
 	};
 	
 	public void updateCheckBox() { //체크박스를 새로 배치
-	    checkBoxes = new JCheckBox[toDoString.length];
         for(int i = 0; i<toDoString.length; i++){
-            checkBoxes[i] = new JCheckBox("");
-            setCheckBox(checkBoxes[i],i);
+        	checkBoxes[i].setVisible(true);
+			checkBoxes[i].setEnabled(true);
+			setCheckBox(checkBoxes[i], i);
             checkBoxes[i].addActionListener(event -> {
-            	buttons[4].setEnabled(toDoString.length==0?false:true);
             	buttons[5].setEnabled(true);
             	buttons[6].setEnabled(true);
             	});
@@ -151,9 +167,11 @@ public class FrameTest2 extends JFrame {
 	
 	public void deleteToDoList(int index) {//deleteButtonDialog에서 받은 번호를 넣어주면 ToDoList의 deleteToDoList로 쏴줘서 삭제하게 하고, 화면의 투두리스트 업데이트
 		ToDoList.deleteToDoList(index);
-		for(int i = 0; i<toDoString.length; i++) {
-			this.remove(toDo[i]);
-			this.remove(checkBoxes[i]);
+		for(int i = 0; i<toDoLength; i++) {
+			toDo[i].setVisible(false);
+			toDo[i].setEnabled(false);
+			checkBoxes[i].setVisible(false);
+			checkBoxes[i].setEnabled(false);
 		}
 		updateToDoList();
 		updateCheckBox();
