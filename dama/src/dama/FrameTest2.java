@@ -2,6 +2,9 @@ package dama;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 import javax.swing.*;
 
 public class FrameTest2 extends JFrame {
@@ -25,7 +28,7 @@ public class FrameTest2 extends JFrame {
 	Button buttons[] = { //하단 버튼
     		new Button("Feed"),
     		new Button("Exercise"),
-    		new Button("Button 3"),
+    		new Button("Sleep"),
     		new Button("Add"),
     		new Button("Delete"),
     		new Button("Reset"),
@@ -44,14 +47,24 @@ public class FrameTest2 extends JFrame {
     
     JCheckBox checkBoxes[] = new JCheckBox[toDoString.length];
 	
+    
+    class JFrameWindowClosingEventHandler extends WindowAdapter {
+    	public void windowClosing(WindowEvent e) {
+    		poket.setFileData();
+    		JFrame frame = (JFrame)e.getWindow();
+    		frame.dispose();
+    	}
+    }
+    
 	public FrameTest2(String str) {
 		
 		super(str);
 
 		setTitle("TOmaDOtchi 0.0.0");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(windowWidth,windowHeight);
         setVisible(true);
+        //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      	this.addWindowListener(new JFrameWindowClosingEventHandler());
         
         Container contentPane = getContentPane();
         contentPane.setLayout(null);
@@ -102,6 +115,7 @@ public class FrameTest2 extends JFrame {
         buttons[5].addActionListener(event -> {resetButtonDialog();});
         buttons[6].addActionListener(event -> {applyButtonDialog();});
         
+        buttons[4].setEnabled(toDoString.length==0?false:true);
 		buttons[5].setEnabled(false);
 		buttons[6].setEnabled(false);
 	}
@@ -121,6 +135,7 @@ public class FrameTest2 extends JFrame {
             checkBoxes[i] = new JCheckBox("");
             setCheckBox(checkBoxes[i],i);
             checkBoxes[i].addActionListener(event -> {
+            	buttons[4].setEnabled(toDoString.length==0?false:true);
             	buttons[5].setEnabled(true);
             	buttons[6].setEnabled(true);
             	});
@@ -179,7 +194,7 @@ public class FrameTest2 extends JFrame {
         d.setLayout(null);
         d.setModal(true);
        
-		String information[] = {"Feed TOmaDOtchi.", "Exercise TOmaDOtchi.", "Button3."};
+		String information[] = {"Feed TOmaDOtchi.", "Exercise TOmaDOtchi.", "Sleep TomaDOtchi."};
 		Label informationLabel = new Label(information[num], Label.LEFT);
 		informationLabel.setLocation(20,50);
 		informationLabel.setSize(150, 20);
@@ -198,11 +213,11 @@ public class FrameTest2 extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(num==0){
-					//밥먹이기
+					poket.eat();
 				} else if(num==1){
-					//운동시키기
+					poket.exercise();
 				} else if(num==2){
-					//버튼3
+					poket.sleep();
 				}
 				d.dispose();
 			}
@@ -257,12 +272,10 @@ public class FrameTest2 extends JFrame {
         d.setVisible(true);
         d.setLayout(null);
         
-        
         Label informationLabel = new Label("Please select the item to be deleted.", Label.LEFT);
 		informationLabel.setLocation(20,40);
 		informationLabel.setSize(260, 20);
         d.add(informationLabel);
-        
         
         JRadioButton radio[] = new JRadioButton[toDoString.length];
         ButtonGroup group = new ButtonGroup();
