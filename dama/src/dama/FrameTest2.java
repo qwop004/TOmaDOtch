@@ -38,6 +38,8 @@ public class FrameTest2 extends JFrame {
     		};
     
     String toDoString[] = ToDoList.getToDoList();
+    
+    JCheckBox checkBoxes[] = new JCheckBox[toDoString.length];
 	
 	public FrameTest2(String str) {
 		
@@ -61,8 +63,7 @@ public class FrameTest2 extends JFrame {
 	
 	public void makeGUI() {
 
-        for(int i = 0; i<buttons.length; i++) setButton(buttons[i],i); //하단 버튼 배치
-        
+		//다마고치
         Label tamaTitle = new Label("I'm Tomadotchi.", Label.CENTER);
         tamaTitle.setLocation(blankWidth, 10);
 		tamaTitle.setSize(statusWidth, ToDoListHeight);
@@ -78,26 +79,18 @@ public class FrameTest2 extends JFrame {
         contentPane.add(imageLabel);
         */
         
+        //투두리스트
         Label toDoTitle = new Label("To Do List", Label.CENTER);
         toDoTitle.setLocation(blankWidth*2 + statusWidth, 10);
 		toDoTitle.setSize(ToDoListWidth, ToDoListHeight);
 		this.add(toDoTitle);
+        
+		updateToDoList();	
+		updateCheckBox();
+        
+		//버튼
+		for(int i = 0; i<buttons.length; i++) setButton(buttons[i],i); //하단 버튼 배치
 		
-	    JCheckBox[] checkBoxes = new JCheckBox[toDoString.length];
-        for(int i = 0; i<toDoString.length; i++){//체크박스 배치
-            checkBoxes[i] = new JCheckBox("");
-            setCheckBox(checkBoxes[i],i);
-            checkBoxes[i].addActionListener(event -> {buttons[5].setEnabled(true); buttons[6].setEnabled(true);});
-        }
-        
-		updateToDoList();
-		/*
-		 * 투 두 리스트 띄워주기.
-		 * 투 두 리스트는 파일에서 긁어와서 여기로 쏴주면 그걸 배열 형태로 갖고 있다가 띄운다.('배열 형태로 갖고 있다가' 부분이 아직 미구현...)
-		 * 나중에 이 옆에 네모난 체크 버튼...?같은 걸 추가해서 완료 여부를 표시하고, Apply 버튼을 누르면 적용되어 토마도치에게 적용 여부를 쏴주는 걸로.
-		 * Reset 버튼 누르면 체크 버튼 등등의 반영사항 초기화하고 파일에서 새로 긁어와서 띄움
-		 */
-        
         buttons[0].addActionListener(event -> {confirmButtonDialog(buttons[0], 0);});
         buttons[1].addActionListener(event -> {confirmButtonDialog(buttons[1], 1);});
         buttons[2].addActionListener(event -> {confirmButtonDialog(buttons[2], 2);});
@@ -111,7 +104,7 @@ public class FrameTest2 extends JFrame {
 	}
 
 	public void updateToDoList() { //투두리스트 라벨을 새로 쏴주는 메소드
-		String toDoString[] = ToDoList.getToDoList(); //getToDoList 하면 파일에서 잘 열어서 string 배열로 넘겨주세요
+		toDoString = ToDoList.getToDoList(); //getToDoList 하면 파일에서 잘 열어서 string 배열로 넘겨주세요
 		Label toDo[] = new Label[toDoString.length];
         for(int i = 0; i<toDoString.length; i++){
         	toDo[i] = new Label(toDoString[i]);
@@ -119,14 +112,27 @@ public class FrameTest2 extends JFrame {
         }
 	};
 	
+	public void updateCheckBox() { //체크박스를 새로 배치
+        for(int i = 0; i<toDoString.length; i++){
+            checkBoxes[i] = new JCheckBox("");
+            setCheckBox(checkBoxes[i],i);
+            checkBoxes[i].addActionListener(event -> {
+            	buttons[5].setEnabled(true);
+            	buttons[6].setEnabled(true);
+            	});
+        }
+	};
+	
 	public void addToDoList(String string) { //addButtonDialog에서 받은 텍스트를 넣어주면 ToDoList의 addToDoList로 쏴줘서 저장하게 하고, 화면의 투두리스트 업데이트
 		ToDoList.addToDoList(string);
 		updateToDoList();
+		updateCheckBox();
 	};
 	
 	public void deleteToDoList(int num) {//deleteButtonDialog에서 받은 번호를 넣어주면 ToDoList의 deleteToDoList로 쏴줘서 삭제하게 하고, 화면의 투두리스트 업데이트
 		//ToDoList.deleteTodoList(num);
 		updateToDoList();
+		updateCheckBox();
 	};
 	
 	
