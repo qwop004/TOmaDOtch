@@ -2,6 +2,8 @@ package dama;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ToDoList {
 	
@@ -45,12 +47,11 @@ public class ToDoList {
 
 	
 	public static void deleteToDoList(int num) { //투두리스트 삭제
-		String[] beforeArray = getToDoList();
-		String[] afterArray = new String[beforeArray.length - 1];
-		int j = 0;
-		for (int  i = 0; i<beforeArray.length; i++) {
-			if (i != num) afterArray[j++] = beforeArray[i];
-		}
+		String[] afterArray = getToDoList();
+		List<String> newList = new ArrayList<>(Arrays.asList(afterArray));
+		newList.remove(num);
+
+		afterArray = newList.toArray(new String[0]);
 		
 		try (FileOutputStream fos = new FileOutputStream(filePath, false)) {} //false 옵션으로 파일을 열면 내용이 사라짐.
 		catch(IOException e) {e.printStackTrace();} 
