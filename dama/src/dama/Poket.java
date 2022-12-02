@@ -3,10 +3,19 @@ package dama;
 public class Poket {
 	public String race; // 종족
 	public String name; // 캐릭터 이름
-	public int age; // 나이
-	public int power; // 파워
-	public int energy; // 에너지
-	int cnt;
+	private int age; // 나이
+	private int power; // 파워
+	private int energy; // 에너지
+	private int cnt;
+	
+	public int getAge() {return age;}
+	public void setAge(int age) {this.age = age;}
+	public int getPower() {return power;}
+	public void setPower(int power) {this.power = power;}
+	public int getEnergy() {return energy;}
+	public void setEnergy(int energy) {this.energy = energy;}
+	public int getCnt() {return cnt;}
+	public void setCnt(int cnt) {this.cnt = cnt;}
 	
 	public Poket() // 생성자
 	{

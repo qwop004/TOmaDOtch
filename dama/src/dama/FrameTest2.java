@@ -31,9 +31,13 @@ public class FrameTest2 extends JFrame {
     		};
 	
     Label statuses[] = { //캐릭터 정보 라벨
-    		new Label("Status 1", Label.LEFT),
-    		new Label("Status 2", Label.LEFT),
-    		new Label("Status 3", Label.LEFT)
+    		
+//    		new Label("Age" + Poket.getAge(), Label.LEFT),
+//    		new Label("Power"+ "=" + Poket.getPower(), Label.LEFT),
+//    		new Label("Energy" + "=" + Poket.getEnergy(), Label.LEFT) //이렇게 하면 될줄알았는데 왜안될까
+    		new Label("Age", Label.LEFT),
+    		new Label("Power", Label.LEFT),
+    		new Label("Energy", Label.LEFT)
     		};
     
     String toDoString[] = ToDoList.getToDoList();
@@ -61,7 +65,7 @@ public class FrameTest2 extends JFrame {
 	public void makeGUI() {
 
 		//다마고치
-        Label tamaTitle = new Label("I'm Tomadotchi.", Label.CENTER);
+        Label tamaTitle = new Label("I'm TomaDotchi.", Label.CENTER);
         tamaTitle.setLocation(blankWidth, 10);
 		tamaTitle.setSize(statusWidth, ToDoListHeight);
 		this.add(tamaTitle);
@@ -101,7 +105,7 @@ public class FrameTest2 extends JFrame {
 	}
 
 	public void updateToDoList() { //투두리스트 라벨을 새로 쏴주는 메소드
-		toDoString = ToDoList.getToDoList(); //getToDoList 하면 파일에서 잘 열어서 string 배열로 넘겨주세요
+		toDoString = ToDoList.getToDoList(); //파일을 배열로 반환하여 넘겨받음
 		Label toDo[] = new Label[toDoString.length];
         for(int i = 0; i<toDoString.length; i++){
         	toDo[i] = new Label(toDoString[i]);
@@ -123,7 +127,7 @@ public class FrameTest2 extends JFrame {
 	
 	public void addToDoList(String string) { //addButtonDialog에서 받은 텍스트를 넣어주면 ToDoList의 addToDoList로 쏴줘서 저장하게 하고, 화면의 투두리스트 업데이트
 		ToDoList.addToDoList(string);
-		updateToDoList();
+		updateToDoList(); 				
 		updateCheckBox();
 	};
 	
