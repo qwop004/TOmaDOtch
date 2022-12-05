@@ -1,13 +1,4 @@
 
-<<<<<<< HEAD
-asdfa
-000000000000
-00000000000
-123123
-00000000000000000000000000000
-788888
-789789
-=======
 a
 b
 c
@@ -15,4 +6,4 @@ d
 e
 f
 g
->>>>>>> branch 'Taemin' of https://github.com/qwop004/TOmaDOtch.git
+h
