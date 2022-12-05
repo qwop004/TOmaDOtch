@@ -20,17 +20,20 @@ public class Poket {
 	public int power = Integer.parseInt(fileData[3]); // 파워
 	public int energy = Integer.parseInt(fileData[4]); // 에너지
 	public int cnt = Integer.parseInt(fileData[5]);
-	
+	public int point = Integer.parseInt(fileData[6]);
+
 	public int getAge() {return age;}
 	public int getPower() {return power;}
 	public int getEnergy() {return energy;}
 	public int getCnt() {return cnt;}
+	public int getPoint() {return point;}
 	
 	//당장은 안써요
 	public void setAge(int age) {this.age = age;}
 	public void setPower(int power) {this.power = power;}
 	public void setEnergy(int energy) {this.energy = energy;}
 	public void setCnt(int cnt) {this.cnt = cnt;}
+	public void setPoint(int point) {this.point = point;}
 	
 	public static String[] getFileData() { //캐릭터 정보 반환	
 		ArrayList<String> packet = new ArrayList<>();		
@@ -56,7 +59,7 @@ public class Poket {
 		}
 		return input_arr;
 	}
-	
+		
 	public void setFileData() {//GUI 닫을 때 캐릭터 관련 변경사항을 파일에 저장
 		try (FileOutputStream fos = new FileOutputStream(filePath, false)) {} //false 옵션으로 파일을 열면 내용이 사라짐.
 		catch(IOException e) {e.printStackTrace();}
@@ -73,9 +76,16 @@ public class Poket {
             fw.write(Integer.toString(energy));
             fw.newLine();
             fw.write(Integer.toString(cnt));
+            fw.newLine();
+            fw.write(Integer.toString(point));
             fw.close();
         }
         catch(Exception e) {e.printStackTrace();}
+	}
+	
+	public void pointStatus(int num) {
+		int prePoint = getPoint();
+		setPoint(prePoint+num);
 	}
 	
 	public Poket() // 생성자
@@ -111,7 +121,7 @@ public class Poket {
 			cnt = 0;
 		}
 	}
- 
+
 	public void attack() // 공격하기
 	{
 		energy -= 15;

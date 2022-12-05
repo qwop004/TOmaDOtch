@@ -51,9 +51,7 @@ public class ToDoList {
 		String[] afterArray = getToDoList();
 		List<String> newList = new ArrayList<>(Arrays.asList(afterArray));
 		newList.remove(num);
-
 		afterArray = newList.toArray(new String[0]);
-		
 		try (FileOutputStream fos = new FileOutputStream(filePath, false)) {} //false 옵션으로 파일을 열면 내용이 사라짐.
 		catch(IOException e) {e.printStackTrace();} 
 		
@@ -87,8 +85,8 @@ public class ToDoList {
 		return IsCleared;
 	}
 	
-	public static void setCheckBoxes(Boolean[] nowChecked){ //투두리스트 추가
-
+	public static void setCheckBoxes(Boolean[] nowChecked){ //체크박스 상태정보
+		
 		try (FileOutputStream fos = new FileOutputStream(temporary, false)) { //false 옵션으로 파일을 열면 내용이 사라짐.
 			BufferedWriter fw = new BufferedWriter(new FileWriter(temporary,true));
 			for(int i=0; i<8; i++) {
@@ -98,5 +96,5 @@ public class ToDoList {
             fw.close();
 		}
 		catch(IOException e) {e.printStackTrace();} 
-	}
+	}	
 }

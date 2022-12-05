@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Arrays;
+import java.util.Collections;
 
 import javax.swing.*;
 
@@ -41,6 +43,7 @@ public class FrameTest2 extends JFrame {
     		new Label("Age: " + poket.getAge(), Label.LEFT),
     		new Label("Power: " + poket.getPower(), Label.LEFT),
     		new Label("Energy: " + poket.getEnergy(), Label.LEFT),
+    		new Label("Point: " + poket.getPoint(), Label.LEFT)
     		};
 
     String[] toDoString = {"","","","","","","",""}; //파일에서 읽어들인 투두리스트 저장
@@ -120,10 +123,17 @@ public class FrameTest2 extends JFrame {
         buttons[5].addActionListener(event -> {resetButtonDialog();});
         buttons[6].addActionListener(event -> {applyButtonDialog();});
         
-        buttons[3].setEnabled(toDoString.length==8?false:true); //꽉 차면 add버튼 비홀성화
-        buttons[4].setEnabled(toDoString.length==0?false:true); //텅 비면 delete버튼 비활성화
+        updateButtonStatus();
 		buttons[5].setEnabled(false);
 		buttons[6].setEnabled(false);
+	}
+
+	public void updateButtonStatus() {								//버튼 비활성화 시킬거 늘어나서 그냥 하나로..
+        buttons[0].setEnabled(poket.getPoint() == 0?false:true);
+        buttons[1].setEnabled(poket.getPoint() == 0?false:true);
+        buttons[2].setEnabled(poket.getPoint() == 0?false:true);
+        buttons[3].setEnabled(toDoString.length==8?false:true); 	//꽉 차면 add버튼 비홀성화
+        buttons[4].setEnabled(toDoString.length==0?false:true); 	//텅 비면 delete버튼 비활성화
 	}
 
 
@@ -135,8 +145,7 @@ public class FrameTest2 extends JFrame {
         	toDo[i].setText(toDoString[i]);
         	setToDoList(toDo[i],i);
         }
-        buttons[3].setEnabled(toDoString.length==8?false:true);
-        buttons[4].setEnabled(toDoString.length==0?false:true);
+        updateButtonStatus();
 	};
 	
 	public void updateCheckBox() { //체크박스를 새로 배치
@@ -157,6 +166,8 @@ public class FrameTest2 extends JFrame {
 		statuses[0].setText("Age: " + poket.getAge());
 		statuses[1].setText("Power: " + poket.getPower());
 		statuses[2].setText("Energy: " + poket.getEnergy());
+		statuses[3].setText("Point: " + poket.getPoint());
+		updateButtonStatus();
 	};
 	
 	public void addToDoList(String string) { //addButtonDialog에서 받은 텍스트를 넣어주면 ToDoList의 addToDoList로 쏴줘서 저장하게 하고, 화면의 투두리스트 업데이트
@@ -165,7 +176,7 @@ public class FrameTest2 extends JFrame {
 		updateCheckBox();
 	};
 	
-	public void deleteToDoList(int index) {//deleteButtonDialog에서 받은 번호를 넣어주면 ToDoList의 deleteToDoList로 쏴줘서 삭제하게 하고, 화면의 투두리스트 업데이트
+	public void deleteToDoList(int index) { //deleteButtonDialog에서 받은 번호를 넣어주면 ToDoList의 deleteToDoList로 쏴줘서 삭제하게 하고, 화면의 투두리스트 업데이트
 		ToDoList.deleteToDoList(index);
 		for(int i = 0; i<toDoLength; i++) {
 			toDo[i].setVisible(false);
@@ -203,7 +214,6 @@ public class FrameTest2 extends JFrame {
 		this.add(ToDoList);
 	}
 	
-	
 	public void confirmButtonDialog(Button button, int num) { //버튼 누르고 실행하기 전에 확인받는 다이얼로그를 생성(0,1,2번 버튼)
 		Dialog d= new Dialog(this);
 		d.setTitle("Confirm");
@@ -237,6 +247,7 @@ public class FrameTest2 extends JFrame {
 				} else if(num==2){
 					poket.sleep();
 				}
+				poket.pointStatus(-1);
 				updateStatus();
 				d.dispose();
 			}
@@ -308,7 +319,6 @@ public class FrameTest2 extends JFrame {
         }
         
         radio[toDoString.length-1].setSelected(true);
-        
         
 		Button cancelButton = new Button("Cancel");
         cancelButton.setLocation(20,80 + 20*toDoString.length);
@@ -394,16 +404,19 @@ public class FrameTest2 extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Boolean[] nowChecked = getNowChecked();
-				Boolean[] pointArray = pointAward(nowChecked);
+				//Boolean[] pointArray = pointAward(nowChecked);
 				ToDoList.setCheckBoxes(nowChecked);//체크박스 변경사항 저장
-				//다마고치에 정보 보내기 코드 만들어주세요. 예를 들면,
-				//Tamagotchi.pointup(pointArray);
 				buttons[5].setEnabled(false);
 				buttons[6].setEnabled(false);
 				d.dispose();
+				
+				int addPoint = Collections.frequency(Arrays.asList(nowChecked),true); //배열>리스트 변환 nowChecked의 true값 몇개인지 카운트
+				poket.pointStatus(addPoint);									  //포인트 추가	
+				updateStatus();														  //변경된 포인트 값의 반영을 위한 업데이트
 			}
         });
 		d.add(okButton);
+		
 	}
 	
 	public Boolean[] getNowChecked() {
@@ -414,13 +427,13 @@ public class FrameTest2 extends JFrame {
 		return nowChecked;
 	}
 	
-	public Boolean[] pointAward(Boolean[] nowChecked) {
-		Boolean[] isPoint = new Boolean[8];
-		for(int i = 0; i < checkBoxes.length; i++) {
-			isPoint[i] = (((isCleared[i] == false) && (nowChecked[i] == true)) ? true : false);
-		}
-		return isPoint;
-	}
+//	public Boolean[] pointAward(Boolean[] nowChecked) {
+//		Boolean[] isPoint = new Boolean[8];
+//		for(int i = 0; i < checkBoxes.length; i++) {
+//			isPoint[i] = (((isCleared[i] == false) && (nowChecked[i] == true)) ? true : false);
+//		}
+//		return isPoint;
+//	}
 
 	public static void main(String args[]) {
 	new FrameTest2("start TOmaDOtchi sample 0.0.0");
