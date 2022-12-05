@@ -8,6 +8,7 @@ import java.util.List;
 public class ToDoList {
 	
 	public static String filePath = "ToDoList.txt"; //사용할 파일명 정의
+	public static String temporary = "temp.txt"; //임시파일... 쓸까 말까 고민 중인데 일단 걍 만든 편. 뭐 아무래도 체크박스 표시 여부 저장할 파일은 필요하잖아요?
 	
 	public static String[] getToDoList() { //투두리스트 반환	
 		ArrayList<String> packet = new ArrayList<>();		
@@ -61,4 +62,41 @@ public class ToDoList {
 		}
 	}
 	
+	public static Boolean[] getIsCleared() {
+		ArrayList<Boolean> packet = new ArrayList<>();		
+		Boolean[] IsCleared = new Boolean[8];		
+		BufferedReader br = null;				
+		try {
+			br = new BufferedReader(new FileReader(new File(temporary))); 
+			String s;
+			while ((s = br.readLine()) != null) {
+				if(!s.isBlank())
+				packet.add(Boolean.parseBoolean(s));
+			}
+			IsCleared = packet.toArray(IsCleared);		
+			br.close();
+		}
+		catch (FileNotFoundException e) {e.printStackTrace();}
+		catch (IOException e) {e.printStackTrace();}
+		finally {
+			if(br != null) {
+				try {br.close();}
+				catch (IOException e) {e.printStackTrace();}
+			}
+		}
+		return IsCleared;
+	}
+	
+	public static void setCheckBoxes(Boolean[] nowChecked){ //투두리스트 추가
+
+		try (FileOutputStream fos = new FileOutputStream(temporary, false)) { //false 옵션으로 파일을 열면 내용이 사라짐.
+			BufferedWriter fw = new BufferedWriter(new FileWriter(temporary,true));
+			for(int i=0; i<8; i++) {
+				fw.newLine();
+	            fw.write(nowChecked[i].toString());
+			}
+            fw.close();
+		}
+		catch(IOException e) {e.printStackTrace();} 
+	}
 }

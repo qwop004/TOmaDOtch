@@ -27,7 +27,7 @@ public class FrameTest2 extends JFrame {
 	
 	Poket poket = new Poket();
 	
-	Button buttons[] = { //하단 버튼
+	Button[] buttons = { //하단 버튼
     		new Button("Feed"),
     		new Button("Exercise"),
     		new Button("Sleep"),
@@ -37,19 +37,22 @@ public class FrameTest2 extends JFrame {
     		new Button("Apply")
     		};
 	
-    Label statuses[] = { //캐릭터 정보 라벨
+    Label[] statuses = { //캐릭터 정보 라벨
     		new Label("Age: " + poket.getAge(), Label.LEFT),
     		new Label("Power: " + poket.getPower(), Label.LEFT),
     		new Label("Energy: " + poket.getEnergy(), Label.LEFT),
     		};
 
-    String toDoString[] = {"","","","","","","",""};
+    String[] toDoString = {"","","","","","","",""}; //파일에서 읽어들인 투두리스트 저장
     
-    Label toDo[] = {
+    Label[] toDo = {
     		new Label(""),new Label(""),new Label(""),new Label(""),
     		new Label(""),new Label(""),new Label(""),new Label("")
     };
-    JCheckBox checkBoxes[] = {
+    
+    Boolean[] isCleared = {false, false, false, false, false, false, false, false}; //파일에서 읽어들인 투두리스트 클리어 여부 저장
+    
+    JCheckBox[] checkBoxes = {
     		new JCheckBox(""),new JCheckBox(""),new JCheckBox(""),new JCheckBox(""),
     		new JCheckBox(""),new JCheckBox(""),new JCheckBox(""),new JCheckBox(""),
     };
@@ -94,7 +97,7 @@ public class FrameTest2 extends JFrame {
         
         // 캐릭터이미지출력(오류는 없는데 안 돌아감)
         JLabel imageLabel = new JLabel(new ImageIcon("image.png"));
-        imageLabel.setBounds(80, 20, 100, 100);
+        imageLabel.setBounds(20, 80, 100, 100);
         this.add(imageLabel);
         
         //투두리스트
@@ -137,14 +140,16 @@ public class FrameTest2 extends JFrame {
 	};
 	
 	public void updateCheckBox() { //체크박스를 새로 배치
+		isCleared = ToDoList.getIsCleared();
         for(int i = 0; i<toDoString.length; i++){
         	checkBoxes[i].setVisible(true);
 			checkBoxes[i].setEnabled(true);
-			setCheckBox(checkBoxes[i], i);
+			checkBoxes[i].setSelected(isCleared[i]);
             checkBoxes[i].addActionListener(event -> {
             	buttons[5].setEnabled(true);
             	buttons[6].setEnabled(true);
             	});
+            setCheckBox(checkBoxes[i], i);
         }
 	};
 	
@@ -188,6 +193,7 @@ public class FrameTest2 extends JFrame {
 	public void setCheckBox(JCheckBox checkBox, int i) {
 		checkBox.setLocation(blankWidth + statusWidth, 40 + i * ToDoListHeight);
 		checkBox.setSize(blankWidth, ToDoListHeight);
+		checkBox.isSelected();
 		this.add(checkBox);
 	}
 	
@@ -206,7 +212,7 @@ public class FrameTest2 extends JFrame {
         d.setLayout(null);
         d.setModal(true);
        
-		String information[] = {"Feed TOmaDOtchi.", "Exercise TOmaDOtchi.", "Sleep TomaDOtchi."};
+		String[] information = {"Feed TOmaDOtchi.", "Exercise TOmaDOtchi.", "Sleep TomaDOtchi."};
 		Label informationLabel = new Label(information[num], Label.LEFT);
 		informationLabel.setLocation(20,50);
 		informationLabel.setSize(150, 20);
@@ -290,7 +296,7 @@ public class FrameTest2 extends JFrame {
 		informationLabel.setSize(260, 20);
         d.add(informationLabel);
         
-        JRadioButton radio[] = new JRadioButton[toDoString.length];
+        JRadioButton[] radio = new JRadioButton[toDoString.length];
         ButtonGroup group = new ButtonGroup();
         
         for(int i=0; i<radio.length; i++){
@@ -353,7 +359,7 @@ public class FrameTest2 extends JFrame {
         okButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//리셋
+				updateCheckBox();
 				buttons[5].setEnabled(false);
 				buttons[6].setEnabled(false);
 				d.dispose();
@@ -387,13 +393,33 @@ public class FrameTest2 extends JFrame {
         okButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//저장
+				Boolean[] nowChecked = getNowChecked();
+				Boolean[] pointArray = pointAward(nowChecked);
+				ToDoList.setCheckBoxes(nowChecked);//체크박스 변경사항 저장
+				//다마고치에 정보 보내기 코드 만들어주세요. 예를 들면,
+				//Tamagotchi.pointup(pointArray);
 				buttons[5].setEnabled(false);
 				buttons[6].setEnabled(false);
 				d.dispose();
 			}
         });
 		d.add(okButton);
+	}
+	
+	public Boolean[] getNowChecked() {
+		Boolean[] nowChecked = new Boolean[8];
+		for(int i = 0; i < checkBoxes.length; i++) {
+			nowChecked[i] = checkBoxes[i].isSelected();
+		}
+		return nowChecked;
+	}
+	
+	public Boolean[] pointAward(Boolean[] nowChecked) {
+		Boolean[] isPoint = new Boolean[8];
+		for(int i = 0; i < checkBoxes.length; i++) {
+			isPoint[i] = (((isCleared[i] == false) && (nowChecked[i] == true)) ? true : false);
+		}
+		return isPoint;
 	}
 
 	public static void main(String args[]) {
