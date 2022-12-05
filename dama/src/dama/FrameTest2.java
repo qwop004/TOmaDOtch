@@ -129,14 +129,11 @@ public class FrameTest2 extends JFrame {
 	}
 
 	public void updateButtonStatus() {								//버튼 비활성화 시킬거 늘어나서 그냥 하나로..
-        buttons[0].setEnabled(poket.getPoint() == 0?false:true);
-		//buttons[0].setEnabled(poket.getEnergy() <= 0?false:true); //에너지 0일떄 버튼 비활성화(죽는거) 추가
-        buttons[1].setEnabled(poket.getPoint() == 0?false:true);
-		//buttons[1].setEnabled(poket.getEnergy() <= 0?false:true);
-        buttons[2].setEnabled(poket.getPoint() == 0?false:true);
-		//buttons[2].setEnabled(poket.getEnergy() <= 0?false:true); 코드 중복때문에 수정할게요
+		buttons[0].setEnabled(poket.getPoint() == 0?false : poket.getEnergy() <= 0?false:true); //수정완료 에너지 0일떄 or 포인트 0일때 버튼 안눌리게 변경
+        buttons[1].setEnabled(poket.getPoint() == 0?false:poket.getEnergy() <= 0?false:true);
+        buttons[2].setEnabled(poket.getPoint() == 0?false:poket.getEnergy() <= 0?false:true);
         buttons[3].setEnabled(toDoString.length==8?false:true); 	//꽉 차면 add버튼 비홀성화
-        buttons[4].setEnabled(toDoString.length==0?false:true);
+        buttons[4].setEnabled(toDoString.length==0?false:true); 
 	}
 
 
