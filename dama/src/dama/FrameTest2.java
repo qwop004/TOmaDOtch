@@ -40,18 +40,9 @@ public class FrameTest2 extends JFrame {
     Label statuses[] = { //캐릭터 정보 라벨
     		new Label("Age: " + poket.getAge(), Label.LEFT),
     		new Label("Power: " + poket.getPower(), Label.LEFT),
-    		new Label("Age: " + poket.getEnergy(), Label.LEFT),
+    		new Label("Energy: " + poket.getEnergy(), Label.LEFT),
     		};
-    /*
-    String toDoString[] = ToDoList.getToDoList();
-    Label toDo[] = new Label[toDoString.length];
-    JCheckBox checkBoxes[] = new JCheckBox[toDoString.length];
-	*/
-    /*
-    String toDoString[] = new String[toDoLength];
-    Label toDo[] = new Label[toDoLength];
-    JCheckBox checkBoxes[] = new JCheckBox[toDoLength];
-    */
+
     String toDoString[] = {"","","","","","","",""};
     
     Label toDo[] = {
@@ -101,14 +92,10 @@ public class FrameTest2 extends JFrame {
 		this.add(tamaTitle);
         for(int i = 0; i<statuses.length; i++) setStatus(statuses[i],i); //캐릭터 스테이터스 표시 라벨 배치
         
-        /* 캐릭터이미지출력(이거 인터넷에 있는 코드 그대로 긁어다 붙인 거라 수정 필요)
-        JLabel imageLabel = new JLabel();
-        ImageIcon characterImage = new ImageIcon(FrameTest.class.getResource("img/Tomadotchi.png"));
-        imageLabel.setIcon(characterImage);
-        imageLabel.setBounds(30, 30, 122, 130);
-        imageLabel.setHorizontalAlignment(Label.CENTER);
-        contentPane.add(imageLabel);
-        */
+        // 캐릭터이미지출력(오류는 없는데 안 돌아감)
+        JLabel imageLabel = new JLabel(new ImageIcon("image.png"));
+        imageLabel.setBounds(80, 20, 100, 100);
+        this.add(imageLabel);
         
         //투두리스트
         Label toDoTitle = new Label("To Do List", Label.CENTER);
@@ -130,7 +117,8 @@ public class FrameTest2 extends JFrame {
         buttons[5].addActionListener(event -> {resetButtonDialog();});
         buttons[6].addActionListener(event -> {applyButtonDialog();});
         
-        buttons[4].setEnabled(toDoString.length==0?false:true);
+        buttons[3].setEnabled(toDoString.length==8?false:true); //꽉 차면 add버튼 비홀성화
+        buttons[4].setEnabled(toDoString.length==0?false:true); //텅 비면 delete버튼 비활성화
 		buttons[5].setEnabled(false);
 		buttons[6].setEnabled(false);
 	}
@@ -144,6 +132,7 @@ public class FrameTest2 extends JFrame {
         	toDo[i].setText(toDoString[i]);
         	setToDoList(toDo[i],i);
         }
+        buttons[3].setEnabled(toDoString.length==8?false:true);
         buttons[4].setEnabled(toDoString.length==0?false:true);
 	};
 	
@@ -157,6 +146,12 @@ public class FrameTest2 extends JFrame {
             	buttons[6].setEnabled(true);
             	});
         }
+	};
+	
+	public void updateStatus() {
+		statuses[0].setText("Age: " + poket.getAge());
+		statuses[1].setText("Power: " + poket.getPower());
+		statuses[2].setText("Energy: " + poket.getEnergy());
 	};
 	
 	public void addToDoList(String string) { //addButtonDialog에서 받은 텍스트를 넣어주면 ToDoList의 addToDoList로 쏴줘서 저장하게 하고, 화면의 투두리스트 업데이트
@@ -236,6 +231,7 @@ public class FrameTest2 extends JFrame {
 				} else if(num==2){
 					poket.sleep();
 				}
+				updateStatus();
 				d.dispose();
 			}
         });
