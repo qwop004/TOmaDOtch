@@ -99,7 +99,7 @@ public class FrameTest2 extends JFrame {
         for(int i = 0; i<statuses.length; i++) setStatus(statuses[i],i); //캐릭터 스테이터스 표시 라벨 배치
         
         // 캐릭터이미지출력(오류는 없는데 안 돌아감)
-        JLabel imageLabel = new JLabel(new ImageIcon("image.png"));
+        JLabel imageLabel = new JLabel(new ImageIcon("2.png")); //이미지 추가한거로 적용했어요
         imageLabel.setBounds(20, 80, 100, 100);
         this.add(imageLabel);
         
@@ -130,10 +130,13 @@ public class FrameTest2 extends JFrame {
 
 	public void updateButtonStatus() {								//버튼 비활성화 시킬거 늘어나서 그냥 하나로..
         buttons[0].setEnabled(poket.getPoint() == 0?false:true);
+	buttons[0].setEnabled(poket.getEnergy() <= 0?false:true); //에너지 0일떄 버튼 비활성화(죽는거) 추가
         buttons[1].setEnabled(poket.getPoint() == 0?false:true);
+	buttons[1].setEnabled(poket.getEnergy() <= 0?false:true);
         buttons[2].setEnabled(poket.getPoint() == 0?false:true);
+	buttons[2].setEnabled(poket.getEnergy() <= 0?false:true);
         buttons[3].setEnabled(toDoString.length==8?false:true); 	//꽉 차면 add버튼 비홀성화
-        buttons[4].setEnabled(toDoString.length==0?false:true); 	//텅 비면 delete버튼 비활성화
+        buttons[4].setEnabled(toDoString.length==0?false:true);
 	}
 
 
