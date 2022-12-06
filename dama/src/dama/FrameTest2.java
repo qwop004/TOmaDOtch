@@ -86,7 +86,14 @@ public class FrameTest2 extends JFrame {
 	}
 	
 	public void makeMenu() {
-		//만들 메뉴 - 파일 (저장, 불러오기, 새로 시작하기) (없어도 될 듯)
+		
+		// 투마도치 메뉴 - 재시작 해서 다마고치씨 죽었을 때 체력이랑 나이랑 초기화하고 재시작 하는거 까진 해야될듯.. 어렵진않을듯 일단 패스했음
+//		JMenuBar bar = new JMenuBar();
+//		JMenu TOmaDochi = new JMenu("TOmaDochi");
+//		bar.add(TOmaDochi);
+//		this.setJMenuBar(bar);
+//		
+
 	}
 	
 	public void makeGUI() {
@@ -99,8 +106,12 @@ public class FrameTest2 extends JFrame {
         for(int i = 0; i<statuses.length; i++) setStatus(statuses[i],i); //캐릭터 스테이터스 표시 라벨 배치
         
         // 캐릭터이미지출력(오류는 없는데 안 돌아감)
-        JLabel imageLabel = new JLabel(new ImageIcon("2.png")); //이미지 추가한거로 적용했어요
-        imageLabel.setBounds(20, 80, 100, 100);
+        ImageIcon icon = new ImageIcon("2.png");
+        Image img = icon.getImage();
+        Image changeImg = img.getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        ImageIcon changeIcon = new ImageIcon(changeImg);
+        JLabel imageLabel = new JLabel(new ImageIcon(changeImg)); //이미지 추가한거로 적용했어요
+        imageLabel.setBounds(20, 120, 100, 100);
         this.add(imageLabel);
         
         //투두리스트
@@ -111,6 +122,7 @@ public class FrameTest2 extends JFrame {
         
 		updateToDoList();	
 		updateCheckBox();
+		repaint();														//왜인지 모르겠는데, 이자식을 추가해야 그림.체크박스가 한번에 제대로 나옴. 흔한 문제인듯?
         
 		//버튼
 		for(int i = 0; i<buttons.length; i++) setButton(buttons[i],i); //하단 버튼 배치
@@ -128,14 +140,13 @@ public class FrameTest2 extends JFrame {
 		buttons[6].setEnabled(false);
 	}
 
-	public void updateButtonStatus() {								//버튼 비활성화 시킬거 늘어나서 그냥 하나로..
-		buttons[0].setEnabled(poket.getPoint() == 0?false : poket.getEnergy() <= 0?false:true); //수정완료 에너지 0일떄 or 포인트 0일때 버튼 안눌리게 변경
-        buttons[1].setEnabled(poket.getPoint() == 0?false:poket.getEnergy() <= 0?false:true);
-        buttons[2].setEnabled(poket.getPoint() == 0?false:poket.getEnergy() <= 0?false:true);
-        buttons[3].setEnabled(toDoString.length==8?false:true); 	//꽉 차면 add버튼 비홀성화
-        buttons[4].setEnabled(toDoString.length==0?false:true); 
+	public void updateButtonStatus() {	//버튼 비활성화 시킬거 늘어나서 그냥 하나로..					//다마고치 포인트나 체력이 0이면...
+		buttons[0].setEnabled(poket.getPoint() == 0?false:poket.getEnergy() <= 0?false:true); 	//				Feed 버튼 비활성화
+        buttons[1].setEnabled(poket.getPoint() == 0?false:poket.getEnergy() <= 0?false:true);	//				Exercise 버튼 비활성화
+        buttons[2].setEnabled(poket.getPoint() == 0?false:poket.getEnergy() <= 0?false:true);	//				Add 버튼 비활성화
+        buttons[3].setEnabled(toDoString.length==8?false:true); 								//ToDoList 꽉 차면 add 버튼 비활성화
+        buttons[4].setEnabled(toDoString.length==0?false:true);									//ToDoList 없으면 delete 버튼 비활성화
 	}
-
 
 	public void updateToDoList() { //투두리스트 라벨을 새로 쏴주는 메소드
 		toDoString = ToDoList.getToDoList(); //파일을 배열로 반환하여 넘겨받음
@@ -411,12 +422,11 @@ public class FrameTest2 extends JFrame {
 				d.dispose();
 				
 				int addPoint = Collections.frequency(Arrays.asList(nowChecked),true); //배열>리스트 변환 nowChecked의 true값 몇개인지 카운트
-				poket.pointStatus(addPoint);									  //포인트 추가	
+				poket.pointStatus(addPoint);									      //포인트 추가	
 				updateStatus();														  //변경된 포인트 값의 반영을 위한 업데이트
 			}
         });
 		d.add(okButton);
-		
 	}
 	
 	public Boolean[] getNowChecked() {
@@ -426,14 +436,6 @@ public class FrameTest2 extends JFrame {
 		}
 		return nowChecked;
 	}
-	
-//	public Boolean[] pointAward(Boolean[] nowChecked) {
-//		Boolean[] isPoint = new Boolean[8];
-//		for(int i = 0; i < checkBoxes.length; i++) {
-//			isPoint[i] = (((isCleared[i] == false) && (nowChecked[i] == true)) ? true : false);
-//		}
-//		return isPoint;
-//	}
 
 	public static void main(String args[]) {
 	new FrameTest2("start TOmaDOtchi sample 0.0.0");
