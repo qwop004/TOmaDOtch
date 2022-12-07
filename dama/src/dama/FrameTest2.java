@@ -106,12 +106,20 @@ public class FrameTest2 extends JFrame {
         for(int i = 0; i<statuses.length; i++) setStatus(statuses[i],i); //캐릭터 스테이터스 표시 라벨 배치
         
         // 캐릭터이미지출력(오류는 없는데 안 돌아감)
-        ImageIcon icon = new ImageIcon("2.png");
+        ImageIcon icon = new ImageIcon();    // poket.age 받아서 나이마다 다른거 출력하도록 바꿈
+		if(poket.age <= 2)
+			icon = new ImageIcon("13.png");
+		else if(poket.age <= 4)
+			icon = new ImageIcon("2.png");
+		else if(poket.age <= 6)
+			icon = new ImageIcon("9.png");
+		else if(poket.age <= 8)
+			icon = new ImageIcon("11.png");
         Image img = icon.getImage();
         Image changeImg = img.getScaledInstance(120, 120, Image.SCALE_SMOOTH);
-        ImageIcon changeIcon = new ImageIcon(changeImg);
+        //ImageIcon changeIcon = new ImageIcon(changeImg);
         JLabel imageLabel = new JLabel(new ImageIcon(changeImg)); //이미지 추가한거로 적용했어요
-        imageLabel.setBounds(20, 120, 100, 100);
+        imageLabel.setBounds(20, 120, 150, 100);
         this.add(imageLabel);
         
         //투두리스트
