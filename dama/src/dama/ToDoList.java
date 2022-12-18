@@ -8,7 +8,7 @@ import java.util.List;
 public class ToDoList {
 	
 	public static String filePath = "ToDoList.txt"; //사용할 파일명 정의
-	public static String temporary = "temp.txt"; //임시파일... 쓸까 말까 고민 중인데 일단 걍 만든 편. 뭐 아무래도 체크박스 표시 여부 저장할 파일은 필요하잖아요?
+	public static String temporary = "temp.txt"; //체크박스 표시 여부 저장
 	
 	public static String[] getToDoList() { //투두리스트 반환	
 		ArrayList<String> packet = new ArrayList<>();		
@@ -60,7 +60,7 @@ public class ToDoList {
 		}
 	}
 	
-	public static Boolean[] getIsCleared() {
+	public static Boolean[] getIsCleared() { //체크박스 체크 여부 반환
 		ArrayList<Boolean> packet = new ArrayList<>();		
 		Boolean[] IsCleared = new Boolean[8];		
 		BufferedReader br = null;				

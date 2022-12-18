@@ -14,28 +14,28 @@ public class Poket {
 
 	public static String filePath = "Tamagotchi.txt"; //사용할 파일명 정의
 	public String fileData[] = getFileData();
+	
 	public String race = fileData[0]; // 종족
 	public String name = fileData[1]; // 캐릭터 이름
+	
 	public int age = Integer.parseInt(fileData[2]); // 나이
-	public int power = Integer.parseInt(fileData[3]); // 파워
-	public int energy = Integer.parseInt(fileData[4]); // 에너지
-	public int cnt = Integer.parseInt(fileData[5]);
-	public int point = Integer.parseInt(fileData[6]);
+	public int power = Integer.parseInt(fileData[3]); // 힘
+	public int energy = Integer.parseInt(fileData[4]); // 체력
 
+	public int cnt = Integer.parseInt(fileData[5]); //점수
+	public int point = Integer.parseInt(fileData[6]); //포인트
+
+	//캐틱터 정보 반환
 	public int getAge() {return age;}
 	public int getPower() {return power;}
 	public int getEnergy() {return energy;}
 	public int getCnt() {return cnt;}
 	public int getPoint() {return point;}
 	
-	//당장은 안써요
-	public void setAge(int age) {this.age = age;}
-	public void setPower(int power) {this.power = power;}
-	public void setEnergy(int energy) {this.energy = energy;}
-	public void setCnt(int cnt) {this.cnt = cnt;}
+	//포인트 설정
 	public void setPoint(int point) {this.point = point;}
 	
-	public static String[] getFileData() { //캐릭터 정보 반환	
+	public static String[] getFileData() { //캐릭터 정보 읽어오기
 		ArrayList<String> packet = new ArrayList<>();		
 		String[] input_arr = new String[packet.size()];		
 		BufferedReader br = null;				

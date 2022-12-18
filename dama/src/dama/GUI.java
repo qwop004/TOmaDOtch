@@ -4,13 +4,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import javax.swing.*;
 
-public class FrameTest2 extends JFrame {
+public class GUI extends JFrame {
 	
+	//디자인적인 수치는 여기에서 final로 정의하여 수정이 용이하게끔 한다
 	public static final int windowWidth = 500;
 	public static final int windowHeight = 300;
 	
@@ -27,9 +30,11 @@ public class FrameTest2 extends JFrame {
 	
 	public static final int toDoLength = 8;
 	
+	//Poket 객체 생성
 	Poket poket = new Poket();
 	
-	Button[] buttons = { //하단 버튼
+	//하단 버튼
+	Button[] buttons = {
     		new Button("Feed"),
     		new Button("Exercise"),
     		new Button("Sleep"),
@@ -39,22 +44,27 @@ public class FrameTest2 extends JFrame {
     		new Button("Apply")
     		};
 	
-    Label[] statuses = { //캐릭터 정보 라벨
+	//캐릭터 정보 라벨
+    Label[] statuses = {
     		new Label("Age: " + poket.getAge(), Label.LEFT),
     		new Label("Power: " + poket.getPower(), Label.LEFT),
     		new Label("Energy: " + poket.getEnergy(), Label.LEFT),
     		new Label("Point: " + poket.getPoint(), Label.LEFT)
     		};
 
-    String[] toDoString = {"","","","","","","",""}; //파일에서 읽어들인 투두리스트 저장
+    //파일에서 읽어들인 투두리스트 저장하는 배열
+    String[] toDoString = {"","","","","","","",""};
     
+    //투두리스트 표시하는 라벨
     Label[] toDo = {
     		new Label(""),new Label(""),new Label(""),new Label(""),
     		new Label(""),new Label(""),new Label(""),new Label("")
     };
     
-    Boolean[] isCleared = {false, false, false, false, false, false, false, false}; //파일에서 읽어들인 투두리스트 클리어 여부 저장
+    //파일에서 읽어들인 투두리스트 클리어 여부 저장
+    Boolean[] isCleared = {false, false, false, false, false, false, false, false};
     
+    //완료 여부 표시용 체크박스
     JCheckBox[] checkBoxes = {
     		new JCheckBox(""),new JCheckBox(""),new JCheckBox(""),new JCheckBox(""),
     		new JCheckBox(""),new JCheckBox(""),new JCheckBox(""),new JCheckBox(""),
@@ -68,7 +78,8 @@ public class FrameTest2 extends JFrame {
     	}
     }
     
-	public FrameTest2(String str) {
+    //메인 메소드
+	public GUI(String str) {
 		
 		super(str);
 
@@ -87,12 +98,11 @@ public class FrameTest2 extends JFrame {
 	
 	public void makeMenu() {
 		
-		// 투마도치 메뉴 - 재시작 해서 다마고치씨 죽었을 때 체력이랑 나이랑 초기화하고 재시작 하는거 까진 해야될듯.. 어렵진않을듯 일단 패스했음
-//		JMenuBar bar = new JMenuBar();
-//		JMenu TOmaDochi = new JMenu("TOmaDochi");
-//		bar.add(TOmaDochi);
-//		this.setJMenuBar(bar);
-//		
+		//투마도치 메뉴 - 재시작(다마고치 죽었을 때 체력과 나이 초기화, 재시작) 일단 패스
+		//JMenuBar bar = new JMenuBar();
+		//JMenu TOmaDochi = new JMenu("TOmaDochi");
+		//bar.add(TOmaDochi);
+		//this.setJMenuBar(bar);		
 
 	}
 	
@@ -105,8 +115,9 @@ public class FrameTest2 extends JFrame {
 		this.add(tamaTitle);
         for(int i = 0; i<statuses.length; i++) setStatus(statuses[i],i); //캐릭터 스테이터스 표시 라벨 배치
         
-        // 캐릭터이미지출력(오류는 없는데 안 돌아감)
-        ImageIcon icon = new ImageIcon();    // poket.age 받아서 나이마다 다른거 출력하도록 바꿈
+        //캐릭터 이미지 출력
+        //poket.age 받아서 나이마다 다른 이미지 출력
+        ImageIcon icon = new ImageIcon();
 		if(poket.age <= 2)
 			icon = new ImageIcon("13.png");
 		else if(poket.age <= 4)
@@ -117,24 +128,27 @@ public class FrameTest2 extends JFrame {
 			icon = new ImageIcon("11.png");
         Image img = icon.getImage();
         Image changeImg = img.getScaledInstance(120, 120, Image.SCALE_SMOOTH);
-        //ImageIcon changeIcon = new ImageIcon(changeImg);
-        JLabel imageLabel = new JLabel(new ImageIcon(changeImg)); //이미지 추가한거로 적용했어요
+        JLabel imageLabel = new JLabel(new ImageIcon(changeImg));
         imageLabel.setBounds(20, 120, 150, 100);
         this.add(imageLabel);
         
-        //투두리스트
+        //투두리스트 배치
         Label toDoTitle = new Label("To Do List", Label.CENTER);
         toDoTitle.setLocation(blankWidth*2 + statusWidth, 10);
 		toDoTitle.setSize(ToDoListWidth, ToDoListHeight);
 		this.add(toDoTitle);
-        
-		updateToDoList();	
-		updateCheckBox();
-		repaint();														//왜인지 모르겠는데, 이자식을 추가해야 그림.체크박스가 한번에 제대로 나옴. 흔한 문제인듯?
-        
-		//버튼
-		for(int i = 0; i<buttons.length; i++) setButton(buttons[i],i); //하단 버튼 배치
+		updateToDoList();
 		
+		//체크박스 배치
+		updateCheckBox();
+		
+		//이걸 추가해야 그림, 체크박스가 한번에 제대로 출력
+		repaint();
+        
+		//하단 버튼 배치
+		for(int i = 0; i<buttons.length; i++) setButton(buttons[i],i);
+		
+		//버튼 이벤트. 자세한 내용은 메소드로 구현했기 때문에 람다를 이용하여 단순화함
         buttons[0].addActionListener(event -> {confirmButtonDialog(buttons[0], 0);});
         buttons[1].addActionListener(event -> {confirmButtonDialog(buttons[1], 1);});
         buttons[2].addActionListener(event -> {confirmButtonDialog(buttons[2], 2);});
@@ -143,21 +157,34 @@ public class FrameTest2 extends JFrame {
         buttons[5].addActionListener(event -> {resetButtonDialog();});
         buttons[6].addActionListener(event -> {applyButtonDialog();});
         
+        //버튼 정보 업데이트
         updateButtonStatus();
-		buttons[5].setEnabled(false);
-		buttons[6].setEnabled(false);
 	}
 
-	public void updateButtonStatus() {	//버튼 비활성화 시킬거 늘어나서 그냥 하나로..					//다마고치 포인트나 체력이 0이면...
-		buttons[0].setEnabled(poket.getPoint() == 0?false:poket.getEnergy() <= 0?false:true); 	//				Feed 버튼 비활성화
-        buttons[1].setEnabled(poket.getPoint() == 0?false:poket.getEnergy() <= 0?false:true);	//				Exercise 버튼 비활성화
-        buttons[2].setEnabled(poket.getPoint() == 0?false:poket.getEnergy() <= 0?false:true);	//				Add 버튼 비활성화
-        buttons[3].setEnabled(toDoString.length==8?false:true); 								//ToDoList 꽉 차면 add 버튼 비활성화
-        buttons[4].setEnabled(toDoString.length==0?false:true);									//ToDoList 없으면 delete 버튼 비활성화
+	public void updateButtonStatus() {	//버튼 비활성화
+		
+		boolean isEnergyZero = ( poket.getEnergy() <= 0 ? true : false );	//체력이 0인지?
+		boolean isPointZero = ( poket.getPoint() == 0 ? true : false );		//포인트가 0인지?
+		boolean isEnabled = (isEnergyZero || isPointZero ? false : true );	//둘 중 하나라도 0인지?
+		
+		Boolean[] nowChecked = getNowChecked(); //체크된 체크박스 수 세기
+		int checkedCount = 0;
+		for(int i=0;i<toDoString.length;i++) if (nowChecked[i] == true) checkedCount+=1;
+
+		buttons[0].setEnabled(isEnabled); 	//Feed 버튼 비활성화
+        buttons[1].setEnabled(isEnabled);	//Exercise 버튼 비활성화
+        buttons[2].setEnabled(isEnabled);	//Add 버튼 비활성화
+        
+        buttons[3].setEnabled(toDoString.length==8?false:true);	//ToDoList 꽉 차면 Add 버튼 비활성화
+        buttons[4].setEnabled(toDoString.length==0?false:true);	//ToDoList 없으면 Delete 버튼 비활성화
+        buttons[5].setEnabled(toDoString.length==0?false:true);	//ToDoList 없으면 Reset 버튼 비활성화
+        
+		buttons[6].setEnabled(checkedCount==0?false:true); //체크된 체크박스가 없으면 버튼 비활성화
+		
 	}
 
-	public void updateToDoList() { //투두리스트 라벨을 새로 쏴주는 메소드
-		toDoString = ToDoList.getToDoList(); //파일을 배열로 반환하여 넘겨받음
+	public void updateToDoList() {	//투두리스트 라벨을 새로 쏴주는 메소드
+		toDoString = ToDoList.getToDoList(); //파일에 적힌 값을 배열로 반환하여 넘겨받음
         for(int i = 0; i<toDoString.length; i++){
         	toDo[i].setVisible(true);
 			toDo[i].setEnabled(true);
@@ -173,15 +200,12 @@ public class FrameTest2 extends JFrame {
         	checkBoxes[i].setVisible(true);
 			checkBoxes[i].setEnabled(true);
 			checkBoxes[i].setSelected(isCleared[i]);
-            checkBoxes[i].addActionListener(event -> {
-            	buttons[5].setEnabled(true);
-            	buttons[6].setEnabled(true);
-            	});
+            checkBoxes[i].addActionListener(event -> { updateButtonStatus(); });
             setCheckBox(checkBoxes[i], i);
         }
 	};
 	
-	public void updateStatus() {
+	public void updateStatus() {	//캐릭터 정보 업데이트
 		statuses[0].setText("Age: " + poket.getAge());
 		statuses[1].setText("Power: " + poket.getPower());
 		statuses[2].setText("Energy: " + poket.getEnergy());
@@ -195,8 +219,15 @@ public class FrameTest2 extends JFrame {
 		updateCheckBox();
 	};
 	
-	public void deleteToDoList(int index) { //deleteButtonDialog에서 받은 번호를 넣어주면 ToDoList의 deleteToDoList로 쏴줘서 삭제하게 하고, 화면의 투두리스트 업데이트
-		ToDoList.deleteToDoList(index);
+	public void deleteToDoList(int[] indexes) { //deleteButtonDialog에서 받은 번호를 넣어주면 ToDoList의 deleteToDoList로 쏴줘서 삭제하게 하고, 화면의 투두리스트 업데이트
+		Boolean[] checkBoxData = getNowChecked();
+		List<Boolean> newList = new ArrayList<>(Arrays.asList(checkBoxData));
+		for (int i = 0; i<indexes.length; i++) {
+			newList.remove(indexes[i]-i);
+			newList.add(false);
+			ToDoList.deleteToDoList(indexes[i]-i);
+		}	
+		ToDoList.setCheckBoxes(newList.toArray(new Boolean[0]));
 		for(int i = 0; i<toDoLength; i++) {
 			toDo[i].setVisible(false);
 			toDo[i].setEnabled(false);
@@ -220,11 +251,12 @@ public class FrameTest2 extends JFrame {
         this.add(status);
 	}
 	
-	public void setCheckBox(JCheckBox checkBox, int i) {
+	public void setCheckBox(JCheckBox checkBox, int i) { //체크박스 배치
 		checkBox.setLocation(blankWidth + statusWidth, 40 + i * ToDoListHeight);
 		checkBox.setSize(blankWidth, ToDoListHeight);
 		checkBox.isSelected();
 		this.add(checkBox);
+		repaint();
 	}
 	
 	public void setToDoList(Label ToDoList, int i){ //투두리스트 배치
@@ -241,7 +273,7 @@ public class FrameTest2 extends JFrame {
         d.setLayout(null);
         d.setModal(true);
        
-		String[] information = {"Feed TOmaDOtchi.", "Exercise TOmaDOtchi.", "Sleep TomaDOtchi."};
+		String[] information = {"Feed TOmaDOtchi.", "Exercise TOmaDOtchi.", "Sleep TomaDOtchi."}; //다이얼로그에서 출력할 글씨
 		Label informationLabel = new Label(information[num], Label.LEFT);
 		informationLabel.setLocation(20,50);
 		informationLabel.setSize(150, 20);
@@ -256,7 +288,7 @@ public class FrameTest2 extends JFrame {
         Button okButton = new Button("OK");
         okButton.setLocation(75, 80);
         okButton.setSize(buttonWidth,buttonHeight);
-        okButton.addActionListener(new ActionListener() {
+        okButton.addActionListener(new ActionListener() { //정석적인 액션 리스너 구현 방법
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(num==0){
@@ -304,8 +336,7 @@ public class FrameTest2 extends JFrame {
         okButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				buttons[5].setEnabled(true);
-				buttons[6].setEnabled(true);
+				updateButtonStatus();
 				addToDoList(textField.getText());
 				d.dispose();
 			}
@@ -352,10 +383,10 @@ public class FrameTest2 extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				for(int i=0;i<toDoString.length;i++) {
 					if (radio[i].isSelected() == true) {
-						deleteToDoList(i);
+						int[] index = {i};
+						deleteToDoList(index);
 					}
-				buttons[5].setEnabled(true);
-				buttons[6].setEnabled(true);
+					updateButtonStatus();
 				d.dispose();
 				}
 			}
@@ -371,7 +402,7 @@ public class FrameTest2 extends JFrame {
         d.setLayout(null);
         d.setModal(true);
        
-		Label informationLabel = new Label("Reset your changes.", Label.LEFT);
+		Label informationLabel = new Label("Delete all of to-do list.", Label.LEFT);
 		informationLabel.setLocation(20,50);
 		informationLabel.setSize(150, 20);
         d.add(informationLabel);
@@ -388,9 +419,10 @@ public class FrameTest2 extends JFrame {
         okButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				updateCheckBox();
-				buttons[5].setEnabled(false);
-				buttons[6].setEnabled(false);
+				//모든 투두리스트 내용 삭제
+				int[] indexAll = {0, 1, 2, 3, 4, 5, 6, 7};
+				deleteToDoList(Arrays.copyOfRange(indexAll, 0, toDoString.length));//모두 삭제
+				updateButtonStatus();
 				d.dispose();
 			}
         });
@@ -423,10 +455,19 @@ public class FrameTest2 extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Boolean[] nowChecked = getNowChecked();
-				//Boolean[] pointArray = pointAward(nowChecked);
 				ToDoList.setCheckBoxes(nowChecked);//체크박스 변경사항 저장
-				buttons[5].setEnabled(false);
-				buttons[6].setEnabled(false);
+				
+				//체크된 체크박스 인덱스 번호 저장
+				int[] checkedNumbers = new int[8];
+				int j = 0;
+				for(int i=0;i<toDoString.length;i++) {	
+					if (nowChecked[i] == true) {
+						checkedNumbers[j++] = i;
+						}
+				}
+				deleteToDoList(Arrays.copyOfRange(checkedNumbers, 0, j));//체크된 만큼 삭제
+				
+				updateButtonStatus();
 				d.dispose();
 				
 				int addPoint = Collections.frequency(Arrays.asList(nowChecked),true); //배열>리스트 변환 nowChecked의 true값 몇개인지 카운트
@@ -446,6 +487,6 @@ public class FrameTest2 extends JFrame {
 	}
 
 	public static void main(String args[]) {
-	new FrameTest2("start TOmaDOtchi sample 0.0.0");
+	new GUI("start TOmaDOtchi sample 0.0.0");
 	}
 }
