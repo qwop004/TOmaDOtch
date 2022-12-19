@@ -114,7 +114,7 @@ public class GUI extends JFrame {
 		this.add(tamaTitle);
         for(int i = 0; i<statuses.length; i++) setStatus(statuses[i],i); //캐릭터 스테이터스 표시 라벨 배치
 
-        
+        setTomaDochi();
         updateTomaDochi();
         
         //투두리스트 배치
@@ -153,13 +153,17 @@ public class GUI extends JFrame {
 		else {return tomaDochiImagePath[i];}
 	}
 	
+	public void setTomaDochi() {
+        tomaDochiImage.setLocation(blankWidth, 120);
+        tomaDochiImage.setSize(statusWidth, ToDoListHeight*5);
+        this.add(tomaDochiImage);
+	}
+	
 	public void updateTomaDochi() {
 		BufferedImage bufImg;
 		try {
 			bufImg = ImageIO.read(new File(getTomaDochiImagePath()));
-			JLabel tomaDochiImage = new JLabel(new ImageIcon(bufImg), JLabel.CENTER);
-	        tomaDochiImage.setLocation(blankWidth, 120);
-	        tomaDochiImage.setSize(statusWidth, ToDoListHeight*5);
+	        tomaDochiImage.setIcon(new ImageIcon(bufImg));
 	        this.add(tomaDochiImage);
 		} catch (IOException e) { e.printStackTrace();}
         
