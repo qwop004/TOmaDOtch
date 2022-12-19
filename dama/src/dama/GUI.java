@@ -4,11 +4,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class GUI extends JFrame {
@@ -51,6 +54,13 @@ public class GUI extends JFrame {
     		new Label("Energy: " + poket.getEnergy(), Label.LEFT),
     		new Label("Point: " + poket.getPoint(), Label.LEFT)
     		};
+    
+    /*String[] tomaDochiImagePath = {"images/level-0.gif", "images/level-1.gif", "images/level-2.gif", "images/level-3.gif",
+    							   "images/level-4.gif", "images/level-5.gif", "images/level-6.gif", "images/level-7.gif",
+								   "images/level-8.gif", "images/level-9.gif", "images/level-10.gif","images/level-11.gif"};*/
+    /*    String tamaDochiImagePath = {new Label("images/level-0.gif"), new Label("images/level-1.gif"), new Label("images/level-2.gif"), new Label("images/level-3.gif"),
+    							   new Label("images/level-4.gif"), new Label("images/level-5.gif"), new Label("images/level-6.gif"), new Label("images/level-7.gif"),
+								   new Label("images/level-8.gif"), new Label("images/level-9.gif"), new Label("images/level-10.gif"),new Label("images/level-11.gif")};*/
 
     //파일에서 읽어들인 투두리스트 저장하는 배열
     String[] toDoString = {"","","","","","","",""};
@@ -69,6 +79,10 @@ public class GUI extends JFrame {
     		new JCheckBox(""),new JCheckBox(""),new JCheckBox(""),new JCheckBox(""),
     		new JCheckBox(""),new JCheckBox(""),new JCheckBox(""),new JCheckBox(""),
     };
+	//private Component tomaDochiImage;
+	private JPanel pictureArea;
+	private JLabel picture;
+	private JButton decision2;
     
     class JFrameWindowClosingEventHandler extends WindowAdapter {
     	public void windowClosing(WindowEvent e) {
@@ -92,7 +106,7 @@ public class GUI extends JFrame {
         Container contentPane = getContentPane();
         contentPane.setLayout(null);
         
-        makeMenu();
+        //makeMenu();
         makeGUI();	
 	}
 	
@@ -109,28 +123,14 @@ public class GUI extends JFrame {
 	public void makeGUI() {
 
 		//다마고치
-        Label tamaTitle = new Label("I'm TomaDotchi.", Label.CENTER);
+        Label tamaTitle = new Label("I'm TOmaDOtchi.", Label.CENTER);
         tamaTitle.setLocation(blankWidth, 10);
 		tamaTitle.setSize(statusWidth, ToDoListHeight);
 		this.add(tamaTitle);
         for(int i = 0; i<statuses.length; i++) setStatus(statuses[i],i); //캐릭터 스테이터스 표시 라벨 배치
+
         
-        //캐릭터 이미지 출력
-        //poket.age 받아서 나이마다 다른 이미지 출력
-        ImageIcon icon = new ImageIcon();
-		if(poket.age <= 2)
-			icon = new ImageIcon("13.png");
-		else if(poket.age <= 4)
-			icon = new ImageIcon("2.png");
-		else if(poket.age <= 6)
-			icon = new ImageIcon("9.png");
-		else if(poket.age <= 8)
-			icon = new ImageIcon("11.png");
-        Image img = icon.getImage();
-        Image changeImg = img.getScaledInstance(120, 120, Image.SCALE_SMOOTH);
-        JLabel imageLabel = new JLabel(new ImageIcon(changeImg));
-        imageLabel.setBounds(20, 120, 150, 100);
-        this.add(imageLabel);
+        ///updateTomaDochi();
         
         //투두리스트 배치
         Label toDoTitle = new Label("To Do List", Label.CENTER);
@@ -160,6 +160,33 @@ public class GUI extends JFrame {
         //버튼 정보 업데이트
         updateButtonStatus();
 	}
+
+//	public void setTomaDochiImage() {
+//		picture = new JLabel(null);
+//		picture.setLocation(blankWidth, 120);
+//		picture.setSize(statusWidth, ToDoListHeight*5);
+//		this.add(picture);
+//	public void updateTomaDochi() {
+//		int i=poket.getAge();
+//		BufferedImage bufImg=ImageIO.read(new File("images/level-0"));
+//		picture.setIcon(new ImageIcon(bufImg));
+//	}
+//		
+//        JLabel tomaDochiImage = new JLabel(setTamaDochiImage(), JLabel.CENTER);
+//        
+//        tomaDochiImage.setSize(statusWidth, ToDoListHeight*5);
+//        this.add(tomaDochiImage);
+//	
+//	}
+//	
+//	public String setTamaDochiImage() { //투두리스트 배치
+//		int i = poket.getAge();
+//		System.out.print(tomaDochiImagePath[11]);
+//		if(i<=0) {return tomaDochiImagePath[0];}
+//		else if(i>=11) {return tomaDochiImagePath[11];}
+//		else {return tomaDochiImagePath[i];}
+//		
+//	}
 
 	public void updateButtonStatus() {	//버튼 비활성화
 		
@@ -304,6 +331,7 @@ public class GUI extends JFrame {
 			}
         });
 		d.add(okButton);
+		//updateTomaDochi(); ///////////////////////////////////////////////////////////////////////
 	}
 	
 	public void addButtonDialog() { //투 두 리스트 추가하는 버튼 누르면 나오는 다이얼로그
