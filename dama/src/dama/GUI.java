@@ -309,11 +309,11 @@ public class GUI extends JFrame {
 				}
 				poket.pointStatus(-1);
 				updateStatus();
+				updateTomaDochi();
 				d.dispose();
 			}
         });
 		d.add(okButton);
-		updateTomaDochi();
 	}
 	
 	public void addButtonDialog() { //투 두 리스트 추가하는 버튼 누르면 나오는 다이얼로그
